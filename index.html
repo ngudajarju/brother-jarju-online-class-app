@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#061b31">
+<meta name="description" content="BROTHER JARJU ONLINE CLASS — student learning portal">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>BROTHER JARJU ONLINE CLASS</title>
+<style>
+:root{color-scheme:dark;--navy:#061b31;--gold:#f1c75b;--muted:#b8c6d5}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--navy);font-family:system-ui,Arial,sans-serif;color:#fff}
+#app{height:100%;height:100dvh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+header{min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;background:#041426;border-bottom:1px solid #765f2c}
+.brand{font-family:Georgia,serif;font-weight:800;color:var(--gold);font-size:clamp(12px,3vw,17px);letter-spacing:.5px}
+.actions{display:flex;gap:8px;align-items:center}button,.open-link{border:1px solid #7f6a35;border-radius:9px;background:#f1c75b;color:#102238;font-weight:750;padding:9px 12px;font-size:13px;text-decoration:none;white-space:nowrap}
+#frame{border:0;width:100%;flex:1;min-height:0;background:#061b31}
+#offline{display:none;position:absolute;inset:54px 0 0;background:#061b31;align-items:center;justify-content:center;text-align:center;padding:28px}
+#offline .box{max-width:440px}h1{color:var(--gold);font-family:Georgia,serif;font-size:25px}p{color:var(--muted);line-height:1.6}
+@media(max-width:480px){header{min-height:50px;padding:7px 9px}.brand{max-width:58%;line-height:1.15}.actions button{padding:8px 9px;font-size:12px}}
+</style>
+</head>
+<body>
+<div id="app">
+<header><div class="brand">BROTHER JARJU ONLINE CLASS</div><div class="actions"><button id="installBtn" hidden>Install App</button><a class="open-link" href="https://script.google.com/macros/s/AKfycbyORbP10YyBCY21T8aNCywgo7XBIKfaqzWkrljbwTMiRN9CG0hw2yM1S-aDWcdquAY0CA/exec" target="_blank" rel="noopener">Open Portal</a></div></header>
+<iframe id="frame" title="Brother Jarju Online Class Portal" allow="camera; microphone; autoplay; fullscreen; clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin" src="https://script.google.com/macros/s/AKfycbyORbP10YyBCY21T8aNCywgo7XBIKfaqzWkrljbwTMiRN9CG0hw2yM1S-aDWcdquAY0CA/exec"></iframe>
+<div id="offline"><div class="box"><h1>You are offline</h1><p>The learning portal needs an internet connection to sign in, load lessons, submit quizzes and sync results. Please reconnect and reload the app.</p><button onclick="location.reload()">Try Again</button></div></div>
+</div>
+<script>
+let installPrompt=null;const installBtn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;installBtn.hidden=false;});
+installBtn.addEventListener('click',async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installBtn.hidden=true;});
+window.addEventListener('appinstalled',()=>{installBtn.hidden=true;});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(err=>console.warn('Service worker registration failed',err)));}
+window.addEventListener('offline',()=>{document.getElementById('offline').style.display='flex';});
+window.addEventListener('online',()=>{document.getElementById('offline').style.display='none';document.getElementById('frame').contentWindow.location.reload();});
+</script>
+</body>
+</html>
